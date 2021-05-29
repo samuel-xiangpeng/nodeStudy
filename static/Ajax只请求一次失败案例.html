@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="./js/template-web.js"></script>
+    <script type="text/javascript" src="./js/Ajax.js"></script>
+    <link rel="stylesheet" href="./css/index.css" type="text/css">
+    <title>省市县三级联动</title>
+</head>
+
+<body>
+    <form>
+        <h2>省市县三级联动</h2>
+        <div class="form-group">
+            <select id="province">
+                <option>请选择省份</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <select id="city">
+                <option>请选择城市</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <select id="area">
+                <option>请选择地区</option>
+            </select>
+        </div>
+    </form>
+</body>
+<script type="text/html" id="provinceTpl">
+    <option>请选择省份</option>
+    {{each province as value index}}
+    <option value={{index}}>{{value}}</option>
+    {{/each}}
+</script>
+<script type="text/html" id="cityTpl">
+    <option>请选择城市</option>
+    {{each city as value index}}
+    <option value={{index}}>{{value}}</option>
+    {{/each}}
+</script>
+<script type="text/html" id="areaTpl">
+    <option>请选择地区</option>
+    {{each area as value index}}
+    <option value={{index}}>{{value}}</option>
+    {{/each}}
+</script>
+<script type="text/javascript">
+    const province = document.getElementById("province");
+    const city = document.getElementById("city");
+    const area = document.getElementById("area");
+    Ajax({
+            method: "post",
+            url: "http://localhost:5000/cityinfo",
+            data: {},
+            header: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            }
+        })
+        .then((data) => {
+
+
+            //省级数据数组
+            const provinceArry = [];
+            for (var index in data) {
+                provinceArry.push(data[index].name);
+            }
+
+            var html = template("provinceTpl", {
+                province: provinceArry,
+            });
+            province.innerHTML = html;
+            return new Promise((resolve, reject) => {
+                province.onchange = function() {
+                    var index = this.value;
+                    //返回当前省的信息
+                    resolve(data[index].city);
+                }
+            })
+        })
+        .then((cityinfo) => {
+            console.log(cityinfo);
+            const cityArry = [];
+            for (var index in cityinfo) {
+                cityArry.push(cityinfo[index].name);
+            }
+            console.log(cityArry)
+            var html = template("cityTpl", {
+                city: cityArry
+            });
+            city.innerHTML = html;
+            return new Promise((resolve, reject) => {
+                city.onchange = function() {
+                    var a = this.value;
+                    console.log(cityinfo[a].area);
+                    resolve(cityinfo[a].area);
+                }
+            })
+        })
+        .then((areainfo) => {
+            const areaArry = [];
+            for (var index in areainfo) {
+                areaArry.push(areainfo[index].name);
+            }
+            var html = template("areaTpl", {
+                area: areaArry
+            });
+            area.innerHTML = html;
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+</script>
+
+</html>

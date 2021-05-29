@@ -1,0 +1,19 @@
+form {
+    width: 21rem;
+    // height: 3rem;
+    margin: 10rem auto;
+    .form-group {
+        float: left;
+        select {
+            width: 6.5rem;
+            height: 2.5rem;
+            margin-right: .5rem;
+            outline: none;
+            border-radius: 6px;
+        }
+    }
+    h2 {
+        text-align: center;
+        margin-bottom: .9rem;
+    }
+}

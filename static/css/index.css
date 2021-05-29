@@ -1,0 +1,20 @@
+form {
+  width: 21rem;
+  margin: 10rem auto;
+}
+form .form-group {
+  float: left;
+}
+form .form-group select {
+  width: 6.5rem;
+  height: 2.5rem;
+  margin-right: 0.5rem;
+  outline: none;
+  border-radius: 6px;
+}
+form h2 {
+  text-align: center;
+  margin-bottom: 0.9rem;
+}
+
+/*# sourceMappingURL=index.css.map */
